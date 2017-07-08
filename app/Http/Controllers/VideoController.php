@@ -20,7 +20,7 @@ class VideoController extends Controller
 {   
   public function __construct()
     {
-      
+
     //$this->middleware('admin');
     $this->middleware('auth');
 
@@ -52,50 +52,47 @@ class VideoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreVideo $request )
+    public function store(StoreVideo $req ,Request $request)
     {
-            $file = Input::file('video');
+          
+            $file = $request->input('video');
             $AllowedExt = array("mov", "mp4", "3gp", "ogg");
             $extension = $file->getClientOriginalExtension();
-            if(in_array($extension, $AllowedExt))
+            if(!in_array($extension, $AllowedExt))
             {
-               $filename = time().Auth::id().$file->getClientOriginalName();
-               $destinationPath = public_path('uploads');
-               $file->move($destinationPath, $filename);
+             Session::flash('alert', 'check video type!');
+             return redirect()->action('VideoController@create');
+            }
+            $filename = time().Auth::id().$file->getClientOriginalName();
+            $destinationPath = public_path('uploads');
+            $file->move($destinationPath, $filename);
 
-               $image = Input::file('image');
-               $AllowedExs = array("jpg", "jpeg", "gif", "png");
-               $extension=  $image->getClientOriginalExtension();
-               if(in_array($extension, $AllowedExs))
-                {
-                  $filename2  = time().Auth::id().'.' . $image->getClientOriginalExtension();
-                  $path = public_path('uploads/'. $filename2);
-                  Image::make($image->getRealPath())->resize(400, 258)->save($path);
-
-                  $video = new Video;
-                  $video->video =$filename;
-                  $video->img = $filename2;
-                  $video->title = Input::get('title');;
-                  $video->description = Input::get('description');;
-                  $video->category = Input::get('category');;
-        
-                  $video->save();
-
-                  Session::flash('message', 'new trailer was added successfully');
-                  return redirect()->action('HomeController@index');
-                }
-
-                else
-                {
+            $image = $request->input('image');
+            $AllowedExs = array("jpg", "jpeg", "gif", "png");
+            $extension=  $image->getClientOriginalExtension();
+            if(!in_array($extension, $AllowedExs))
+            {
                   Session::flash('alert', 'check image type!');
                   return redirect()->action('VideoController@create');
-                }
             }
-            else
-            {
-            Session::flash('alert', 'check video type!');
-            return redirect()->action('VideoController@create');
-            }
+            $filename2  = time().Auth::id().'.' . $image->getClientOriginalExtension();
+            $path = public_path('uploads/'. $filename2);
+            Image::make($image->getRealPath())->resize(400, 258)->save($path);
+
+            $video = new Video;
+            $video->video =$filename;
+            $video->img = $filename2;
+            $video->title = $request->input('title');;
+            $video->description = $request->input('description');;
+            $video->category = $request->input('category');;
+        
+            $video->save();
+
+            Session::flash('message', 'new trailer was added successfully');
+            return redirect()->action('HomeController@index');
+                
+
+               
     }
 
     /**
@@ -130,49 +127,53 @@ class VideoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request ,$id)
     {
         $video =Video::find($id);  
 
-        if(Input::hasFile('video'))
+        if($request->input('video'))
         {
-            $file = Input::file('video');
+            $file = $request->input('video');
             $AllowedExt = array("mov", "mp4", "3gp", "ogg");
             $extension = $file->getClientOriginalExtension();
-            if(in_array($extension, $AllowedExt))
+            if(!in_array($extension, $AllowedExt))
             {
-               $filename = time().Auth::id().$file->getClientOriginalName();
-               $destinationPath = public_path('uploads');
-               $file->move($destinationPath, $filename);
-               $video->video= $filename;
+                  Session::flash('message', 'check video type!');
+                  return redirect()->back();  
             }
+            $filename = time().Auth::id().$file->getClientOriginalName();
+            $destinationPath = public_path('uploads');
+            $file->move($destinationPath, $filename);
+            $video->video= $filename;
         }
         
-        if(Input::hasFile('image'))
+        if($request->input('image'))
         {
-               $image = Input::file('image');
+               $image = $request->input('image');
                $AllowedExs = array("jpg", "jpeg", "gif", "png");
                $extension=  $image->getClientOriginalExtension();
-               if(in_array($extension, $AllowedExs))
+               if(!in_array($extension, $AllowedExs))
                 {
-                  $filename2  = time().Auth::id().'.' . $image->getClientOriginalExtension();
-                  $path = public_path('uploads/'. $filename2);
-                  Image::make($image->getRealPath())->resize(400, 258)->save($path);
-                  $video->img= $filename2;
-                }  
+                  Session::flash('message', 'check image type!');
+                  return redirect()->back();
+                } 
+                $filename2  = time().Auth::id().'.' . $image->getClientOriginalExtension();
+                $path = public_path('uploads/'. $filename2);
+                Image::make($image->getRealPath())->resize(400, 258)->save($path);
+                $video->img= $filename2; 
 
         }
 
               // store
-            Input::get('title')!==null ?$video->title = Input::get('title'):'' ;
-            Input::get('description')!==null?$video->description = Input::get('description'):'' ;
-            Input::get('category')!==null?$video->category = Input::get('category'):'' ;
+        $request->input('title')!==null ?$video->title = $request->input('title'):'' ;
+        $request->input('description')!==null?$video->description =$request->input('description'):'' ;
+        $request->input('category')!==null?$video->category = $request->input('category'):'' ;
 
-            $video->save();
+        $video->save();
 
-            // redirect
-            Session::flash('message', 'updated data successfuly');
-            return redirect()->back();
+        // redirect
+        Session::flash('message', 'updated data successfuly');
+        return redirect()->back();
                
     }
 
@@ -183,18 +184,20 @@ class VideoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-       if($video = Video::find($id)) {
-          $video->delete();
-        // redirect
-       Session::flash('message', 'Successfuly deleted a trailer  ');
-       return redirect()->action('HomeController@index');
-       }
-       else {
-        Session::flash('alert', 'Video does not exist!');
-        return redirect()->action('HomeController@index');
-       }
-
+    {   try
+           {
+           $video = Video::findOrFail($id);
+           $video->delete();
+             // redirect
+           Session::flash('message', 'Successfuly deleted a trailer  ');
+           return redirect()->action('HomeController@index');
+           }
+           // catch(Exception $e) catch any exception
+        catch(ModelNotFoundException $e)
+             {
+             dd($e)
+             }
     }
+
 
 }

@@ -14,19 +14,11 @@ class CommentObserver
      */
     public function creating(Comment $comment)
     {  
-        dd('creating');
         $comment->created_by = Auth::id();
         $comment->updated_by = Auth::id();
 
     }
-    public function created(Comment $comment)
-    {  
-        dd('creating');
-        $comment->created_by = Auth::id();
-        $comment->updated_by = Auth::id();
-
-
-    }
+    
 
     /**
      * Listen to the Video deleting event.
@@ -41,13 +33,7 @@ class CommentObserver
         $comment->save();
 
     }
-    public function deleted(Comment $comment)
-    {
-        
-        $comment->deleted_by = Auth::id();
-        $comment->save();
-
-    }
+    
 
     /**
      * Listen to the Videor deleting event.
@@ -61,11 +47,6 @@ class CommentObserver
         $comment->updated_by = Auth::id();
 
     }
-    public function updated(Comment $comment)
-    {
-        
-        $comment->updated_by = Auth::id();
-
-    }
+    
    
 }

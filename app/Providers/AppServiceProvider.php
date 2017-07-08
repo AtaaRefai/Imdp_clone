@@ -5,8 +5,8 @@ namespace App\Providers;
 use App\Video;
 use App\Comment;
 
-use App\observers\VideoObserver;
-use App\observers\CommentObserver;
+use App\Observers\VideoObserver;
+use App\Observers\CommentObserver;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
       Video::observe(VideoObserver::class);
       Comment::observe(CommentObserver::class);
-      Comment::saving(function ($comment) {
+      /*Comment::saving(function ($comment) {
       $comment->created_by = Auth::id(); 
       $comment->updated_by = Auth::id();        
       });
@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
       });
       Comment::updating(function ($comment) {
       $comment->updated_by = Auth::id(); 
-      });
+      });*/
 
     }
 

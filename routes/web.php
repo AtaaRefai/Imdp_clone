@@ -12,7 +12,6 @@
 */
 
 Auth::routes();
-
 Route::get('home/', 'HomeController@index')->name('home');
 Route::get('home/{category}', 'HomeController@show')->name('home');
 

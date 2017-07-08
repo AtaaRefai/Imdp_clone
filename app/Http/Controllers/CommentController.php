@@ -50,9 +50,9 @@ class CommentController extends Controller
     public function store(Request $request)
     {
             $comment = new Comment;
-            $comment->vid = Input::get('vid');
-            $comment->comment = Input::get('comment');
-            $comment->uname= Auth::user()->name;
+            $comment->vid = $request->input('vid');
+            $comment->comment =$request->input('comment');
+            $comment->uname= Auth::user()->name;// i save the user name to have dirict access to it in the view, and the user id is already saved automaticly by the observer in the field "created_by"
             $comment->save();
 
             // redirect
@@ -93,7 +93,7 @@ class CommentController extends Controller
     {
             // store
             $comment =Comment::find($id);  
-            Input::get('comment')!==null? $comment->comment = Input::get('comment'):'';
+            $request->input('comment')!==null? $comment->comment = $request->input('comment'):'';
             $comment->save();
 
             // redirect
@@ -109,15 +109,21 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-       if($comment = Comment::find($id)) {
-          $comment->delete();
-          // redirect
-         Session::flash('message', 'Successfuly deleted a comment  ');
-         return redirect()->back();
-       }
-       else {
-        Session::flash('alert', 'Comment does not exist!');
-        return redirect()->back();
-       } 
+
+        try
+           {
+           $comment = Comment::findOrFail($id);
+           $comment->delete();
+             // redirect
+           Session::flash('message', 'Successfuly deleted a comment  ');
+           return redirect()->back();
+           }
+           // catch(Exception $e) catch any exception
+        catch(ModelNotFoundException $e)
+             {
+             dd($e)
+             }
     }
+
+
 }

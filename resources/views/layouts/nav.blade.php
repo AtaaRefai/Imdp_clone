@@ -71,6 +71,7 @@
              <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="gallery-4col.htm">Categories <b class="caret"></b></a>
                 <ul class="dropdown-menu">
+              
                     <li><a href="{{route('home', ['category' => 'action'])}}">Action movies</a></li>
                     <li><a href="{{route('home', ['category' => 'comedy'])}}">Comedy movies</a></li>
                     <li><a href="{{route('home', ['category' => 'drama'])}}">Drama movies</a></li>
