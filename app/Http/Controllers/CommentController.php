@@ -50,8 +50,8 @@ class CommentController extends Controller
     public function store(Request $request)
     {
             $comment = new Comment;
-            $comment->vid = $request->input('vid');
-            $comment->comment =$request->input('comment');
+            $comment->vid = $request->vid;
+            $comment->comment =$request->comment;
             $comment->uname= Auth::user()->name;// i save the user name to have dirict access to it in the view, and the user id is already saved automaticly by the observer in the field "created_by"
             $comment->save();
 
@@ -89,11 +89,11 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id)
+    public function update(Request $request,$id)
     {
             // store
             $comment =Comment::find($id);  
-            $request->input('comment')!==null? $comment->comment = $request->input('comment'):'';
+            $request->comment!==null? $comment->comment = $request->comment:'';
             $comment->save();
 
             // redirect
@@ -121,7 +121,7 @@ class CommentController extends Controller
            // catch(Exception $e) catch any exception
         catch(ModelNotFoundException $e)
              {
-             dd($e)
+             dd($e);
              }
     }
 

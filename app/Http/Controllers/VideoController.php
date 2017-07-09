@@ -52,10 +52,10 @@ class VideoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreVideo $req ,Request $request)
+    public function store(Request $request,StoreVideo $req )
     {
           
-            $file = $request->input('video');
+            $file = $request->video;
             $AllowedExt = array("mov", "mp4", "3gp", "ogg");
             $extension = $file->getClientOriginalExtension();
             if(!in_array($extension, $AllowedExt))
@@ -67,7 +67,7 @@ class VideoController extends Controller
             $destinationPath = public_path('uploads');
             $file->move($destinationPath, $filename);
 
-            $image = $request->input('image');
+            $image = $request->image;
             $AllowedExs = array("jpg", "jpeg", "gif", "png");
             $extension=  $image->getClientOriginalExtension();
             if(!in_array($extension, $AllowedExs))
@@ -82,9 +82,9 @@ class VideoController extends Controller
             $video = new Video;
             $video->video =$filename;
             $video->img = $filename2;
-            $video->title = $request->input('title');;
-            $video->description = $request->input('description');;
-            $video->category = $request->input('category');;
+            $video->title = $request->title;
+            $video->description = $request->description ;
+            $video->category = $request->category;
         
             $video->save();
 
@@ -131,9 +131,9 @@ class VideoController extends Controller
     {
         $video =Video::find($id);  
 
-        if($request->input('video'))
+        if($request->hasFile('video'))
         {
-            $file = $request->input('video');
+            $file = $request->video;
             $AllowedExt = array("mov", "mp4", "3gp", "ogg");
             $extension = $file->getClientOriginalExtension();
             if(!in_array($extension, $AllowedExt))
@@ -147,9 +147,9 @@ class VideoController extends Controller
             $video->video= $filename;
         }
         
-        if($request->input('image'))
+        if($request->hasFile('image'))
         {
-               $image = $request->input('image');
+               $image = $request->image;
                $AllowedExs = array("jpg", "jpeg", "gif", "png");
                $extension=  $image->getClientOriginalExtension();
                if(!in_array($extension, $AllowedExs))
@@ -165,9 +165,9 @@ class VideoController extends Controller
         }
 
               // store
-        $request->input('title')!==null ?$video->title = $request->input('title'):'' ;
-        $request->input('description')!==null?$video->description =$request->input('description'):'' ;
-        $request->input('category')!==null?$video->category = $request->input('category'):'' ;
+        $request->title!==null ?$video->title = $request->title:'' ;
+        $request->description !==null?$video->description =$request->description:'' ;
+        $request->category !==null?$video->category = $request->category:'' ;
 
         $video->save();
 
@@ -195,7 +195,7 @@ class VideoController extends Controller
            // catch(Exception $e) catch any exception
         catch(ModelNotFoundException $e)
              {
-             dd($e)
+             dd($e);
              }
     }
 
