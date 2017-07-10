@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
       Video::observe(VideoObserver::class);
       Comment::observe(CommentObserver::class);
+
       /*Comment::saving(function ($comment) {
       $comment->created_by = Auth::id(); 
       $comment->updated_by = Auth::id();        

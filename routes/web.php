@@ -12,15 +12,23 @@
 */
 
 Auth::routes();
-Route::get('home/', 'HomeController@index')->name('home');
-Route::get('home/{category}', 'HomeController@show')->name('home');
+//Route::get('home/', 'HomeController@index')->name('home');
+//Route::get('home/{category}', 'HomeController@show')->name('home');
+
 
 Route::post('logout', function(){
 	     Auth::logout();
          return view('auth.login');
 });
 
-Route::resource('videos', 'VideoController');
-Route::resource('comments', 'CommentController');
 
+Route::group(['prefix' => LaravelLocalization::setLocale()], function()
+{
+	/** ADD ALL LOCALIZED ROUTES INSIDE THIS GROUP **/
+	Route::get('home/', 'HomeController@index')->name('home');
+    Route::get('home/{category}', 'HomeController@show')->name('home');
+    Route::resource('videos', 'VideoController');
+    Route::resource('comments', 'CommentController');
+    
+});
 

@@ -62,26 +62,36 @@
             
             <ul class="nav">
            <li><a href="#" class='active'>{{ Auth::user()->name}}</a></li>
-           <li><a href="{{URL::to('home')}}" >Home</a></li>
+           <li><a href="{{URL::to(LaravelLocalization::getCurrentLocale().'/home')}}" >@lang('locale.Home')</a></li>
            @if(Auth::check() && Auth::user()->isAdmin())
-           <li><a href="{{URL::to('videos/create')}}" >Upload</a></li>
+           <li><a href="{{URL::to(LaravelLocalization::getCurrentLocale().'/videos/create')}}" >@lang('locale.Upload')</a></li>
            @endif
 
 
              <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="gallery-4col.htm">Categories <b class="caret"></b></a>
+                <a class="dropdown-toggle" data-toggle="dropdown" href="gallery-4col.htm">@lang('locale.Categories')<b class="caret"></b></a>
+                <ul class="dropdown-menu">     
+                
+
+                    <li><a href="{{route('home', ['category' => 'action'])}}">@lang('locale.Action')</a></li>
+                    <li><a href="{{route('home', ['category' => 'comedy'])}}">@lang('locale.Comedy')</a></li>
+                    <li><a href="{{route('home', ['category' => 'drama'])}}">@lang('locale.Drama')</a></li>
+                    <li><a href="{{route('home', ['category' => 'science'])}}">@lang('locale.Science')</a></li>
+                </ul>
+             </li>
+
+             <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="gallery-4col.htm">@lang('locale.Language') <b class="caret"></b></a>
                 <ul class="dropdown-menu">
               
-                    <li><a href="{{route('home', ['category' => 'action'])}}">Action movies</a></li>
-                    <li><a href="{{route('home', ['category' => 'comedy'])}}">Comedy movies</a></li>
-                    <li><a href="{{route('home', ['category' => 'drama'])}}">Drama movies</a></li>
-                    <li><a href="{{route('home', ['category' => 'science'])}}">Science Fiction movies</a></li>
+                    <li><a href="{{URL::to('ar/home')}}">@lang('locale.Arabic')</a></li>
+                    <li><a href="{{URL::to('en/home')}}">@lang('locale.English')</a></li>
                 </ul>
              </li>
 
              <li><a href="{{URL::to('logout')}}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                                    Logout</a></li>
+                                                    @lang('locale.Logout')</a></li>
             </ul>
 
               <form id="logout-form" action="{{URL::to('logout')}}" method="POST" style="display: none;">

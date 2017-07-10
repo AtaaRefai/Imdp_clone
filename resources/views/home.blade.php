@@ -17,14 +17,14 @@
                         <span class="gallery-hover-3col hidden-phone hidden-tablet">
                             <span class="gallery-icons">
                                 <a href="img/gallery/gallery-img-1-full.jpg" class="item-zoom-link lightbox" title="Custom Illustration" data-rel="prettyPhoto"></a>
-                                <a href="{{URL::to('videos/'.$video->id)}}" 
+                                <a href="{{URL::to(LaravelLocalization::getCurrentLocale().'/videos/'.$video->id)}}" 
                                  class="item-details-link"></a>
 
 
                             </span>
                         </span>
-                        <a href="{{URL::to('videos/'.$video->id)}}"><img src="/uploads/{{$video->img}}" alt="Gallery"></a>
-                        <span class="project-details"><a href="{{URL::to('videos/'.$video->id)}}">
+                        <a href="{{URL::to(LaravelLocalization::getCurrentLocale().'/videos/'.$video->id)}}"><img src="/uploads/{{$video->img}}" alt="Gallery"></a>
+                        <span class="project-details"><a href="{{URL::to(LaravelLocalization::getCurrentLocale().'/videos/'.$video->id)}}">
                         {{$video->title}}</a>Category: {{$video->category}}</span>
                     </li>
 

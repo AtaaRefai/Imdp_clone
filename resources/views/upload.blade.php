@@ -14,35 +14,35 @@
     
 
     <div class="form-group">
-        {{ Form::label('title', 'Title') }}
+        {{ Form::label('title',Lang::get('locale.Title'))}}
         {{ Form::text('title', Input::old('title'), array('class' => 'form-control')) }}
     </div>
 
     <div class="form-group">
-        {{ Form::label('description', 'Description') }}
+        {{ Form::label('description', Lang::get('locale.Description')) }}
         <textarea name='description'></textarea>
     </div>
 
     <div class="form-group">
-        Category:<br>
+        @lang('locale.Categories')<br>
        <select name='category'>
-       <option value="action">Action</option>
-       <option value="comedy">Comedy</option>
-       <option value="drama">Drama</option>
-       <option value="science">Science Fiction</option>
+       <option value="action">@lang('locale.Action')</option>
+       <option value="comedy">@lang('locale.Comedy')</option>
+       <option value="drama">@lang('locale.Drama')</option>
+       <option value="science">@lang('locale.Science')</option>
        </select>
        <br><br>
     </div>
     <div class="form-group">
-     <label>Select a <span class="highlight">trailer</span> to upload:</label>
+     <label>@lang('locale.Select')<span class="highlight">@lang('locale.Trailer')</span>@lang('locale.To')</label>
       {{Form::file('video')}} 
     </div><br>
     <div class="form-group">
-     <label>Select a <span class="highlight">snapshot</span> to upload:</label>
+     <label>@lang('locale.Select')<span class="highlight">@lang('locale.Snapshot')</span> @lang('locale.To')</label>
       {{Form::file('image')}} 
     </div><br>
 
-    {{ Form::submit('Upload', array('class' => 'btn btn-primary')) }}
+    {{ Form::submit(Lang::get('locale.Upload'), array('class' => 'btn btn-primary')) }}
 
 {{ Form::close() }}
 </div>

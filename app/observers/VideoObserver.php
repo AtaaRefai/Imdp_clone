@@ -3,6 +3,8 @@
 namespace App\observers;
 use Illuminate\Support\Facades\Auth;
 use App\Video;
+use Mail;
+use App\User;
 
 class VideoObserver
 {
@@ -25,10 +27,16 @@ class VideoObserver
      * @return void
      */
     public function deleting(Video $video)
-    {
-        
+    {   
+        $id=Auth::id();
+        $user=User::find( $id);
         $video->deleted_by = Auth::id();
         $video->save();
+        Mail::raw('Just deleted a trailer', function ($message) {
+            $message->from('helo.riham@gmail.com', 'Imdp_Clone');
+            $message->to($user->email);
+        });
+
 
     }
 

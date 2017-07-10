@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App;
 
 use Illuminate\Http\Request;
 use App\Video;
@@ -24,12 +25,9 @@ class HomeController extends Controller
      */
     public function index()
     {    
-       
-          $videos=Video::latest()->paginate(3);
+          
+          $videos=  Video::latest()->paginate(3);
           return view('home',compact('videos'));
-
-
-        
     }
 
     public function show($category)
@@ -55,7 +53,13 @@ class HomeController extends Controller
           $videos=Video::where('category', 'science')->paginate(3);
           return view('home',compact('videos'));
           break;
+
+          
+
+          
+
          }
 
     }
+
 }

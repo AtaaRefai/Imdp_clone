@@ -12,8 +12,8 @@
                      
                      	
              <div class="dropdown">
-                <a   href="#" data-toggle="modal" data-target="#myModal">Update</a>
-                <a   href="#" data-toggle="modal" data-target="#myModal2">Delete</a>
+                <a   href="#" data-toggle="modal" data-target="#myModal">@lang('locale.Update')</a>
+                <a   href="#" data-toggle="modal" data-target="#myModal2">@lang('locale.Delete')</a>
 
              </div>
              
@@ -30,7 +30,7 @@
             <!--Tabbed Content-->
             <h5 class="title-bg">More Info</h5>
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#comments" data-toggle="tab">Comments</a></li>
+                <li class="active"><a href="#comments" data-toggle="tab">@lang('locale.Comments')</a></li>
                 <li><a href="#about" data-toggle="tab">Cast</a></li>
             </ul>
 
@@ -70,7 +70,7 @@
             {{ Form::text('comment', Input::old('comment')) }}
             <input name='vid' value='{{$video->id}}' hidden>
             <br>
-            {{ Form::submit('Add ') }}
+            {{ Form::submit(Lang::get('locale.Add')) }}
             </div>
             {{ Form::close() }}
 
@@ -93,35 +93,35 @@
    {{ Form::open(array('url' => 'videos/'.$video->id,'method'=>'PATCH','files'=>true)) }}    
 
     <div class="form-group">
-        {{ Form::label('title', 'Title') }}
+        {{ Form::label('title', Lang::get('locale.Title')) }}
         <input type='text' name='title' placeholder="{{$video->title}}">
     </div>
 
     <div class="form-group">
-        {{ Form::label('description', 'Description') }}
+        {{ Form::label('description',  Lang::get('locale.Description')) }}
         <textarea name='description' placeholder="{{ $video->description }}"></textarea>
     </div>
 
     <div class="form-group">
-        Category:<br>
+       @lang('locale.Categories')<br>
        <select name='category'>
-       <option value="action"{{$video->category=='action'?'selected="selected"' : ''}}>Action</option>
-       <option value="comedy"{{$video->category=='comedy'?'selected="selected"' : ''}}>Comedy</option>
-       <option value="drama" {{$video->category=='drama'?'selected="selected"' : ''}}>Drama</option>
-       <option value="science"{{$video->category=='science'?'selected="selected"' : ''}}>Science Fiction</option>
+       <option value="action"{{$video->category=='action'?'selected="selected"' : ''}}>@lang('locale.Action')</option>
+       <option value="comedy"{{$video->category=='comedy'?'selected="selected"' : ''}}>@lang('locale.Comedy')</option>
+       <option value="drama" {{$video->category=='drama'?'selected="selected"' : ''}}>@lang('locale.Drama')</option>
+       <option value="science"{{$video->category=='science'?'selected="selected"' : ''}}>@lang('locale.Science')</option>
        </select>
        <br><br>
     </div>
     <div class="form-group">
-     <label>Select a <span class="highlight">trailer</span> to upload:</label>
+     <label>@lang('locale.Select')<span class="highlight">@lang('locale.Trailer')</span>@lang('locale.To')</label>
       {{Form::file('video')}} 
     </div><br>
     <div class="form-group">
-     <label>Select a <span class="highlight">snapshot</span> to upload:</label>
+     <label>@lang('locale.Select')<span class="highlight">@lang('locale.Snapshot')</span> @lang('locale.To')</label>
       {{Form::file('image')}} 
     </div><br>
 
-    {{ Form::submit('Update', array('class' => 'btn btn-primary')) }}
+    {{ Form::submit(Lang::get('locale.Update'), array('class' => 'btn btn-primary')) }}
 
     {{ Form::close() }}
                     </div>
@@ -144,9 +144,9 @@
      <div class="modal-body">
      {{ Form::open(array('url' => 'videos/'.$video->id,'method'=>'DELETE')) }}    
      <div class="form-group">
-     {{ Form::label('title', 'Do you want to delete this movie trailer?') }}
+     {{ Form::label('title', Lang::get('locale.dv')) }}
 
-     {{ Form::submit('Delete', array('class' => 'btn btn-primary')) }}
+     {{ Form::submit(Lang::get('locale.Delete'), array('class' => 'btn btn-primary')) }}
 
      {{ Form::close() }}
      </div>
@@ -172,7 +172,7 @@
      <label value='Comment'></label>
      <input name='comment' id='comment'>
      <br><br>
-     {{ Form::submit('Edit', array('class' => 'btn btn-primary')) }}
+     {{ Form::submit(Lang::get('locale.Update'), array('class' => 'btn btn-primary')) }}
      </form>
        </div>
      </div>
@@ -193,9 +193,9 @@
      <div class="modal-body">
      {{ Form::open(array('name' => 'dcomment','method'=>'DELETE')) }}       
      <div class="form-group">
-     <p> Do you want to delete this Comment?</p>
+     <p> @lang('locale.dc')</p>
      <br><br>
-     {{ Form::submit('Delete', array('class' => 'btn btn-primary')) }}
+     {{ Form::submit(Lang::get('locale.Delete'), array('class' => 'btn btn-primary')) }}
      </form>
        </div>
      </div>
