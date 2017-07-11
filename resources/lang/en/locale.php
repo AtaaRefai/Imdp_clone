@@ -23,7 +23,13 @@ return [
     'To'=>'to upload',
     'Snapshot'=>'Snapshot',
     'dc'=>'Do you want to delete this comment?',
-    'dv'=>'Do you want to delete this Trailer?'
+    'dv'=>'Do you want to delete this Trailer?',
+    'addedcomment'=>'Successfully added new comment',
+    'updatedcomment'=>'Successfully updated comment',
+    'deletedcomment'=>'Successfully deleted the comment',
+    'addedtrailer'=>'Successfully added new trailer',
+    'updatedtrailer'=>'Successfully updated trailer',
+    'deletedtrailer'=>'Successfully deleted trailer'
 
 
 

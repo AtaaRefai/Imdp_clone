@@ -7,10 +7,13 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use App\Http\Requests\StoreVideo ;
+use App\Http\Requests\UpdateVideo ;
 use Image; 
 use App\Video;
+use App\User;
 use App\Comment;
-
+use Lang;
+use LaravelLocalization;
 use App\Http\HomeController;
 
 
@@ -21,7 +24,9 @@ class VideoController extends Controller
   public function __construct()
     {
 
-    //$this->middleware('admin');
+    $this->middleware('admin')->except('show');
+
+
     $this->middleware('auth');
 
     }
@@ -52,29 +57,15 @@ class VideoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,StoreVideo $req )
+    public function store(StoreVideo $req )
     {
           
-            $file = $request->video;
-            $AllowedExt = array("mov", "mp4", "3gp", "ogg");
-            $extension = $file->getClientOriginalExtension();
-            if(!in_array($extension, $AllowedExt))
-            {
-             Session::flash('alert', 'check video type!');
-             return redirect()->action('VideoController@create');
-            }
+            $file = request()->video;
             $filename = time().Auth::id().$file->getClientOriginalName();
             $destinationPath = public_path('uploads');
             $file->move($destinationPath, $filename);
 
-            $image = $request->image;
-            $AllowedExs = array("jpg", "jpeg", "gif", "png");
-            $extension=  $image->getClientOriginalExtension();
-            if(!in_array($extension, $AllowedExs))
-            {
-                  Session::flash('alert', 'check image type!');
-                  return redirect()->action('VideoController@create');
-            }
+            $image = request()->image;
             $filename2  = time().Auth::id().'.' . $image->getClientOriginalExtension();
             $path = public_path('uploads/'. $filename2);
             Image::make($image->getRealPath())->resize(400, 258)->save($path);
@@ -82,13 +73,14 @@ class VideoController extends Controller
             $video = new Video;
             $video->video =$filename;
             $video->img = $filename2;
-            $video->title = $request->title;
-            $video->description = $request->description ;
-            $video->category = $request->category;
+            $video->title = request()->title;
+            $video->description = request()->description ;
+            $video->category = request()->category;
         
             $video->save();
 
-            Session::flash('message', 'new trailer was added successfully');
+            $m=Lang::get('locale.addedtrailer');
+            Session::flash('message', $m);
             return redirect()->action('HomeController@index');
                 
 
@@ -103,9 +95,14 @@ class VideoController extends Controller
      */
     public function show($id)
     {    
-        $video= Video::find($id);
+        $video= Video::findOrFail($id);
+        $unames=[];
         $comments=Comment::where('vid', $video->id )->paginate(4);
-        return View('single',compact('video','comments'));
+        foreach ($comments as $comment) {
+            $user=User::findOrFail($comment->created_by);
+            array_push($unames,$user->name);
+        }
+        return View('single',compact('video','comments','unames'));
         
     }
 
@@ -127,52 +124,39 @@ class VideoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request ,$id)
+    public function update(UpdateVideo $req ,$id)
     {
-        $video =Video::find($id);  
+        $video =Video::findOrFail($id);  
 
-        if($request->hasFile('video'))
+        if(request()->hasFile('video'))
         {
-            $file = $request->video;
-            $AllowedExt = array("mov", "mp4", "3gp", "ogg");
-            $extension = $file->getClientOriginalExtension();
-            if(!in_array($extension, $AllowedExt))
-            {
-                  Session::flash('message', 'check video type!');
-                  return redirect()->back();  
-            }
+            $file = request()->video;
             $filename = time().Auth::id().$file->getClientOriginalName();
             $destinationPath = public_path('uploads');
             $file->move($destinationPath, $filename);
             $video->video= $filename;
         }
         
-        if($request->hasFile('image'))
+        if(request()->hasFile('image'))
         {
-               $image = $request->image;
-               $AllowedExs = array("jpg", "jpeg", "gif", "png");
-               $extension=  $image->getClientOriginalExtension();
-               if(!in_array($extension, $AllowedExs))
-                {
-                  Session::flash('message', 'check image type!');
-                  return redirect()->back();
-                } 
+                $image = request()->image;
                 $filename2  = time().Auth::id().'.' . $image->getClientOriginalExtension();
                 $path = public_path('uploads/'. $filename2);
                 Image::make($image->getRealPath())->resize(400, 258)->save($path);
                 $video->img= $filename2; 
-
         }
 
-              // store
-        $request->title!==null ?$video->title = $request->title:'' ;
-        $request->description !==null?$video->description =$request->description:'' ;
-        $request->category !==null?$video->category = $request->category:'' ;
+        // store
+        request()->title!==null ?$video->title = request()->title:'' ;
+        request()->description !==null?$video->description =request()->description:'' ;
+        request()->category !==null?$video->category = request()->category:'' ;
 
         $video->save();
 
         // redirect
-        Session::flash('message', 'updated data successfuly');
+
+        $m=Lang::get(LaravelLocalization::getCurrentLocale().'.locale.updatedtrailer');
+        Session::flash('message', $m);
         return redirect()->back();
                
     }
@@ -183,13 +167,14 @@ class VideoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(UpdateVideo $req,$id)
     {   try
            {
            $video = Video::findOrFail($id);
            $video->delete();
              // redirect
-           Session::flash('message', 'Successfuly deleted a trailer  ');
+           $m=Lang::get('locale.deletedtrailer');
+           Session::flash('message', $m);
            return redirect()->action('HomeController@index');
            }
            // catch(Exception $e) catch any exception

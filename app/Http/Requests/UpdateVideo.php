@@ -3,10 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Comment;
+use App\Video;
 use Illuminate\Support\Facades\Auth;
-
-class UpdateComment extends FormRequest
+class UpdateVideo extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,9 +14,9 @@ class UpdateComment extends FormRequest
      */
     public function authorize()
     {
-        $comment = Comment::find($this->route('comment'));
+         $video = Video::find($this->route('video'));
 
-        return $comment && ($comment->created_by == Auth::id())  ;
+         return $video && ($video->created_by == Auth::id())  ;
     }
 
     /**
@@ -28,7 +27,8 @@ class UpdateComment extends FormRequest
     public function rules()
     {
         return [
-            'comment'=>'min:1, max:200'
+            'image'=>'mimes:jpg,jpeg,gif,png',
+            'video'=>'mimes:mp4,mov,ogg,qt,3gp |min:200 |max:20000',
         ];
     }
 }

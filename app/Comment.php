@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\User;
 
 
 class Comment extends Model
@@ -16,4 +17,6 @@ class Comment extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+    
+   
 }

@@ -28,12 +28,11 @@ class VideoObserver
      */
     public function deleting(Video $video)
     {   
-        $id=Auth::id();
-        $user=User::find( $id);
         $video->deleted_by = Auth::id();
         $video->save();
         Mail::raw('Just deleted a trailer', function ($message) {
-            $message->from('helo.riham@gmail.com', 'Imdp_Clone');
+            $id=Auth::id();
+            $user=User::find( $id);
             $message->to($user->email);
         });
 

@@ -26,8 +26,8 @@ class StoreVideo extends FormRequest
         return [
             'title'=>'required',
             'description'=>'required',
-            'image'=>'required|image',
-            'video'=>'required | mimes:mp4,mov,ogg,qt |min:200 |max:20000',
+            'image'=>'required | mimes:jpg,jpeg,gif,png',
+            'video'=>'required | mimes:mp4,mov,ogg,qt,3gp |min:200 |max:20000',
             'category'=>'required'
         ];
     }

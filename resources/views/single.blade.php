@@ -37,8 +37,10 @@
             <div class="tab-content">
                 <div class="tab-pane active" id="comments">
                      <ul>
+                     @php ($i =0)
                      @foreach($comments as $comment)
-                        <li><i class="icon-comment"></i>{{$comment->uname}} <a href="#">{{$comment->comment}}</a>
+                    
+                        <li><i class="icon-comment"></i>{{$unames[$i]}} <a href="#">{{$comment->comment}}</a>
 
                         @if(Auth::id()==$comment->created_by)
                         <span class='cud'>
@@ -50,6 +52,7 @@
                         </span>
                         @endif
                         </li>
+                        @php ($i++)
                       @endforeach
                     </ul>
                 </div>

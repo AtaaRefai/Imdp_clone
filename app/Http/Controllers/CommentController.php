@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use App\Comment;
+use App\User;
 use App\Http\HomeController;
 use App\Http\Requests\UpdateComment ;
+use Lang;
 
 
 
@@ -47,16 +49,17 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
             $comment = new Comment;
-            $comment->vid = $request->vid;
-            $comment->comment =$request->comment;
-            $comment->uname= Auth::user()->name;// i save the user name to have dirict access to it in the view, and the user id is already saved automaticly by the observer in the field "created_by"
+            $comment->vid = request()->vid;
+            $comment->comment =request()->comment;
+            $user=User::findOrFail(Auth::id());
             $comment->save();
 
             // redirect
-            Session::flash('message', 'Successfully added a Comment!');
+            $m=Lang::get('locale.addedcomment');
+            Session::flash('message', $m);
             return redirect()->back();
     }
 
@@ -89,15 +92,16 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(UpdateComment $request,$id)
     {
             // store
-            $comment =Comment::find($id);  
-            $request->comment!==null? $comment->comment = $request->comment:'';
+            $comment =Comment::findOrFail($id);  
+            request()->comment!==null? $comment->comment = request()->comment:'';
             $comment->save();
 
             // redirect
-            Session::flash('message', 'successfuly updated comment ');
+            $m=Lang::get('locale.updatedcomment');
+            Session::flash('message', $m);
             return redirect()->back();
     }
 
@@ -107,7 +111,7 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(UpdateComment $request,$id)
     {
 
         try
@@ -115,7 +119,8 @@ class CommentController extends Controller
            $comment = Comment::findOrFail($id);
            $comment->delete();
              // redirect
-           Session::flash('message', 'Successfuly deleted a comment  ');
+           $m=Lang::get('locale.deletedcomment');
+           Session::flash('message', $m);
            return redirect()->back();
            }
            // catch(Exception $e) catch any exception
